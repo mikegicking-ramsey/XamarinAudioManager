@@ -1,4 +1,6 @@
 ﻿using System;
+using XamarinAudioManager.Models;
+
 namespace XamarinAudioManager.Interfaces
 {
     public interface IAudioPlayer
@@ -46,5 +48,7 @@ namespace XamarinAudioManager.Interfaces
         EventHandler AudioPlaybackStateChanged { get; set; }
 
         #endregion
+
+        PlayerConfig Configuration { get; set; }
     }
 }

@@ -14,7 +14,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAudioPlayer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMediaControls.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\MediaControls.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\AudioManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)AudioManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\PlayerConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\" />
