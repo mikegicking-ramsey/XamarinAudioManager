@@ -2,6 +2,7 @@
 using AVFoundation;
 using CoreMedia;
 using Foundation;
+using XamarinAudioManager.Enums;
 using XamarinAudioManager.Interfaces;
 using XamarinAudioManager.Models;
 
@@ -9,13 +10,15 @@ namespace XamarinAudioManager
 {
     public class AppleAudioPlayer : IAudioPlayer
     {
-        
+        private static Lazy<IAudioPlayer> _audioPlayer = new Lazy<IAudioPlayer>(() => new AppleAudioPlayer());
+        public static IAudioPlayer SharedInstance => _audioPlayer.Value;
 
         public IMediaControls MediaControls { get; set; }
 
         public int TimeScale = 60;
         public double AudioIncrement { get; set; } = 15;
         public float PlaybackSpeed { get; set; } = 1.0f;
+        public AudioAction LastAudioAction { get; set; } = AudioAction.None;
 
         private AVPlayer audioPlayer;
         public AppleAudioPlayer()
@@ -69,7 +72,9 @@ namespace XamarinAudioManager
             else
             {
                 audioPlayer.Pause();
-            }    
+            }
+
+            LastAudioAction = AudioAction.Pause;
         }
 
         public void Play()
@@ -82,6 +87,8 @@ namespace XamarinAudioManager
             {
                 audioPlayer.Play();
             }
+
+            LastAudioAction = AudioAction.Play;
         }
 
         public void Play(string url)

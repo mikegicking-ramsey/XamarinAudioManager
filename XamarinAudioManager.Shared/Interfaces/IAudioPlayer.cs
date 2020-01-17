@@ -1,9 +1,10 @@
 ﻿using System;
+using XamarinAudioManager.Enums;
+
 namespace XamarinAudioManager.Interfaces
 {
     public interface IAudioPlayer
     {
-
         /// <summary>
         ///  The default Audio Increment for Fast Foward and Re-Wind
         /// </summary>
@@ -13,6 +14,11 @@ namespace XamarinAudioManager.Interfaces
         ///     The current playback speed
         /// </summary>
         float PlaybackSpeed { get; set; }
+
+        /// <summary>
+        ///  The last Audio Action performed by the Player
+        /// </summary>
+        AudioAction LastAudioAction { get; set; }
 
         /// <summary>
         ///  Overridable Media Controls for all Audio methods

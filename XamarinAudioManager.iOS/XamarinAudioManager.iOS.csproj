@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppleAudioPlayer.cs" />
+    <Compile Include="AppleBluetoothManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
