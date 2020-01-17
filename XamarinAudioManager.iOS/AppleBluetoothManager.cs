@@ -3,6 +3,7 @@ using AVFoundation;
 using MediaPlayer;
 using XamarinAudioManager.Enums;
 using XamarinAudioManager.Interfaces;
+using XamarinAudioManager.Models;
 
 namespace XamarinAudioManager
 {
@@ -12,8 +13,11 @@ namespace XamarinAudioManager
 
         private bool isInitialized = false;
 
+        public IBluetoothControls BluetoothControls { get; set; }
+
         public AppleBluetoothManager()
         {
+            BluetoothControls = new BluetoothControls();
         }
 
         public void Intialize()
@@ -44,10 +48,10 @@ namespace XamarinAudioManager
             commandCenter.SeekBackwardCommand.AddTarget(Rewind);
 
             commandCenter.PauseCommand.Enabled = true;
-            commandCenter.PauseCommand.AddTarget(Pause);
+            commandCenter.PauseCommand.AddTarget(PauseCommandHandler);
 
             commandCenter.PlayCommand.Enabled = true;
-            commandCenter.PlayCommand.AddTarget(Play);
+            commandCenter.PlayCommand.AddTarget(PlayCommandHandler);
 
             isInitialized = true;
         }
@@ -60,16 +64,33 @@ namespace XamarinAudioManager
             }
         }
 
-        private MPRemoteCommandHandlerStatus Play(MPRemoteCommandEvent e)
+        private MPRemoteCommandHandlerStatus PlayCommandHandler(MPRemoteCommandEvent e)
         {
-            AppleAudioPlayer.SharedInstance.Play();
-            AppleAudioPlayer.SharedInstance.SetRate();
+
+            if (BluetoothControls.Play != null)
+            {
+                BluetoothControls.Play.Invoke();
+            }
+            else
+            {
+                AppleAudioPlayer.SharedInstance.Play();
+                AppleAudioPlayer.SharedInstance.SetRate();
+            }
+            
             return MPRemoteCommandHandlerStatus.Success;
         }
 
-        private MPRemoteCommandHandlerStatus Pause(MPRemoteCommandEvent e)
+        private MPRemoteCommandHandlerStatus PauseCommandHandler(MPRemoteCommandEvent e)
         {
-            AppleAudioPlayer.SharedInstance.Pause();
+            if (BluetoothControls.Pause != null)
+            {
+                BluetoothControls.Pause.Invoke();
+            }
+            else
+            {
+                AppleAudioPlayer.SharedInstance.Pause();
+            }
+            
             return MPRemoteCommandHandlerStatus.Success;
         }
 
@@ -83,19 +104,38 @@ namespace XamarinAudioManager
 
         private MPRemoteCommandHandlerStatus FastForward(MPRemoteCommandEvent e)
         {
-            audioPlayer.Pause();
-            audioPlayer.FastForward();
-            audioPlayer.Play();
-            audioPlayer.SetRate();
+
+            if (BluetoothControls.SeekForward != null || BluetoothControls.StepForward != null)
+            {
+                BluetoothControls.SeekForward?.Invoke();
+                BluetoothControls.StepForward.Invoke();
+            }
+            else
+            {
+                audioPlayer.Pause();
+                audioPlayer.FastForward();
+                audioPlayer.Play();
+                audioPlayer.SetRate();
+            }
+            
             return MPRemoteCommandHandlerStatus.Success;
         }
 
         private MPRemoteCommandHandlerStatus Rewind(MPRemoteCommandEvent e)
         {
-            audioPlayer.Pause();
-            audioPlayer.Rewind();
-            audioPlayer.Play();
-            audioPlayer.SetRate();
+            if (BluetoothControls.SeekBackward != null || BluetoothControls.StepBackward != null)
+            {
+                BluetoothControls.SeekBackward?.Invoke();
+                BluetoothControls.StepBackward.Invoke();
+            }
+            else
+            {
+                audioPlayer.Pause();
+                audioPlayer.Rewind();
+                audioPlayer.Play();
+                audioPlayer.SetRate();
+            }
+
             return MPRemoteCommandHandlerStatus.Success;
         }
     }

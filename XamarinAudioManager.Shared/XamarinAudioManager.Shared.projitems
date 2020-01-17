@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Enums\AudioAction.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IBluetoothControls.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\BluetoothControls.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAudioManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\" />
