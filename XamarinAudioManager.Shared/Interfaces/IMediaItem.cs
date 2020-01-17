@@ -1,7 +1,8 @@
 ﻿using System;
-namespace XamarinAudioManager.Models
+namespace XamarinAudioManager.Interfaces
 {
     public interface IMediaItem
     {
+
     }
 }

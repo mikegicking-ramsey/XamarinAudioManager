@@ -1,6 +1,5 @@
 ﻿using System;
-
-namespace MediaManager.Playback
+namespace XamarinAudioManager.Interfaces
 {
     public interface IMediaControls
     {

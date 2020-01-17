@@ -1,5 +1,7 @@
 ﻿using System;
-namespace XamarinAudioManager
+using XamarinAudioManager.Interfaces;
+
+namespace XamarinAudioManager.Models
 {
     public class AudioManager
     {

@@ -1,7 +1,13 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinAudioManager", "XamarinAudioManager\XamarinAudioManager.csproj", "{F039A971-8DEC-4362-B952-F34C25B6273C}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "XamarinAudioManager.Shared", "XamarinAudioManager.Shared\XamarinAudioManager.Shared.shproj", "{62EF5C96-66D1-4B3F-86CB-D13415E51446}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinAudioManager.iOS", "XamarinAudioManager.iOS\XamarinAudioManager.iOS.csproj", "{BC572858-11BF-4F5E-8861-1407EC899194}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinAudioManager.Android", "XamarinAudioManager.Android\XamarinAudioManager.Android.csproj", "{901B4E9C-E81A-43AC-942B-C1CD3451A5B0}"
+EndProject
+Project("{5DD5E4FA-CB73-4610-85AB-557B54E96AA9}") = "XamarinAudioManager.NuGet", "XamarinAudioManager.NuGet\XamarinAudioManager.NuGet.nuproj", "{C6B7254F-22B5-42F6-926D-099B7491EB60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,9 +15,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F039A971-8DEC-4362-B952-F34C25B6273C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F039A971-8DEC-4362-B952-F34C25B6273C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F039A971-8DEC-4362-B952-F34C25B6273C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F039A971-8DEC-4362-B952-F34C25B6273C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC572858-11BF-4F5E-8861-1407EC899194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC572858-11BF-4F5E-8861-1407EC899194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC572858-11BF-4F5E-8861-1407EC899194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC572858-11BF-4F5E-8861-1407EC899194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901B4E9C-E81A-43AC-942B-C1CD3451A5B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901B4E9C-E81A-43AC-942B-C1CD3451A5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901B4E9C-E81A-43AC-942B-C1CD3451A5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901B4E9C-E81A-43AC-942B-C1CD3451A5B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6B7254F-22B5-42F6-926D-099B7491EB60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B7254F-22B5-42F6-926D-099B7491EB60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B7254F-22B5-42F6-926D-099B7491EB60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B7254F-22B5-42F6-926D-099B7491EB60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

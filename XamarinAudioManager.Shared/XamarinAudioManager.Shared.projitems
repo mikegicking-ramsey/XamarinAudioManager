@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{62EF5C96-66D1-4B3F-86CB-D13415E51446}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>XamarinAudioManager</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMediaItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\MediaItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IAudioPlayer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IMediaControls.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\MediaControls.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\AudioManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Models\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Interfaces\" />
+  </ItemGroup>
+</Project>

@@ -1,13 +1,13 @@
 ﻿using System;
-using XamarinAudioManager.Models;
-
-namespace XamarinAudioManager
+namespace XamarinAudioManager.Interfaces
 {
     public interface IAudioPlayer
     {
         void Initialize();
 
         void Play();
+
+        void Play(string url);
 
         void Play(IMediaItem mediaItem);
 
