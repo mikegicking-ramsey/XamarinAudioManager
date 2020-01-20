@@ -1,5 +1,6 @@
 ﻿using System;
 using XamarinAudioManager.Enums;
+using XamarinAudioManager.Models;
 
 namespace XamarinAudioManager.Interfaces
 {
@@ -115,5 +116,7 @@ namespace XamarinAudioManager.Interfaces
         EventHandler AudioPlaybackStateChanged { get; set; }
 
         #endregion
+
+        PlayerConfig Configuration { get; set; }
     }
 }
