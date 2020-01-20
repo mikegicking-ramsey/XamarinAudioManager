@@ -7,13 +7,11 @@ using XamarinAudioManager.Models;
 
 namespace XamarinAudioManager
 {
-    public class AppleBluetoothManager
+    public class AppleBluetoothManager : IBluetoothManager
     {
-        private IAudioPlayer audioPlayer;
-
-        private bool isInitialized = false;
-
         public IBluetoothControls BluetoothControls { get; set; }
+        private IAudioPlayer audioPlayer;
+        private bool isInitialized = false;
 
         public AppleBluetoothManager()
         {
@@ -33,19 +31,19 @@ namespace XamarinAudioManager
 
             MPRemoteCommandCenter commandCenter = MPRemoteCommandCenter.Shared;
             commandCenter.ChangePlaybackPositionCommand.Enabled = true;
-            commandCenter.ChangePlaybackPositionCommand.AddTarget(ChangePlaybackPosition);
+            commandCenter.ChangePlaybackPositionCommand.AddTarget(ChangePlaybackPositionCommandHandler);
 
             commandCenter.SeekForwardCommand.Enabled = true;
-            commandCenter.SeekForwardCommand.AddTarget(FastForward);
+            commandCenter.SeekForwardCommand.AddTarget(FastForwardCommandHandler);
 
             commandCenter.SkipForwardCommand.Enabled = true;
-            commandCenter.SkipForwardCommand.AddTarget(FastForward);
+            commandCenter.SkipForwardCommand.AddTarget(FastForwardCommandHandler);
 
             commandCenter.SkipBackwardCommand.Enabled = true;
-            commandCenter.SkipBackwardCommand.AddTarget(Rewind);
+            commandCenter.SkipBackwardCommand.AddTarget(RewindCommandHandler);
 
             commandCenter.SeekBackwardCommand.Enabled = true;
-            commandCenter.SeekBackwardCommand.AddTarget(Rewind);
+            commandCenter.SeekBackwardCommand.AddTarget(RewindCommandHandler);
 
             commandCenter.PauseCommand.Enabled = true;
             commandCenter.PauseCommand.AddTarget(PauseCommandHandler);
@@ -66,21 +64,49 @@ namespace XamarinAudioManager
 
         private MPRemoteCommandHandlerStatus PlayCommandHandler(MPRemoteCommandEvent e)
         {
+            Play();
+            return MPRemoteCommandHandlerStatus.Success;
+        }
 
+        private MPRemoteCommandHandlerStatus PauseCommandHandler(MPRemoteCommandEvent e)
+        {
+            Pause();
+            return MPRemoteCommandHandlerStatus.Success;
+        }
+
+        private MPRemoteCommandHandlerStatus ChangePlaybackPositionCommandHandler(MPRemoteCommandEvent e)
+        {
+            var playbackPositionEvent = (MPChangePlaybackPositionCommandEvent)e; 
+            ChangePosition((int)playbackPositionEvent.PositionTime);
+            return MPRemoteCommandHandlerStatus.Success;
+        }
+
+        private MPRemoteCommandHandlerStatus FastForwardCommandHandler(MPRemoteCommandEvent e)
+        {
+            FastFoward();
+            return MPRemoteCommandHandlerStatus.Success;
+        }
+
+        private MPRemoteCommandHandlerStatus RewindCommandHandler(MPRemoteCommandEvent e)
+        {
+            Rewind();
+            return MPRemoteCommandHandlerStatus.Success;
+        }
+
+        public void Play()
+        {
             if (BluetoothControls.Play != null)
             {
                 BluetoothControls.Play.Invoke();
             }
             else
             {
-                AppleAudioPlayer.SharedInstance.Play();
-                AppleAudioPlayer.SharedInstance.SetRate();
+                audioPlayer.Play();
+                audioPlayer.SetRate();
             }
-            
-            return MPRemoteCommandHandlerStatus.Success;
         }
 
-        private MPRemoteCommandHandlerStatus PauseCommandHandler(MPRemoteCommandEvent e)
+        public void Pause()
         {
             if (BluetoothControls.Pause != null)
             {
@@ -88,40 +114,11 @@ namespace XamarinAudioManager
             }
             else
             {
-                AppleAudioPlayer.SharedInstance.Pause();
-            }
-            
-            return MPRemoteCommandHandlerStatus.Success;
-        }
-
-        private MPRemoteCommandHandlerStatus ChangePlaybackPosition(MPRemoteCommandEvent e)
-        {
-            var playbackPositionEvent = (MPChangePlaybackPositionCommandEvent)e;
-            AppleAudioPlayer.SharedInstance.SeekTo((int)playbackPositionEvent.PositionTime);
-            AppleAudioPlayer.SharedInstance.SetRate();
-            return MPRemoteCommandHandlerStatus.Success;
-        }
-
-        private MPRemoteCommandHandlerStatus FastForward(MPRemoteCommandEvent e)
-        {
-
-            if (BluetoothControls.SeekForward != null || BluetoothControls.StepForward != null)
-            {
-                BluetoothControls.SeekForward?.Invoke();
-                BluetoothControls.StepForward.Invoke();
-            }
-            else
-            {
                 audioPlayer.Pause();
-                audioPlayer.FastForward();
-                audioPlayer.Play();
-                audioPlayer.SetRate();
             }
-            
-            return MPRemoteCommandHandlerStatus.Success;
         }
 
-        private MPRemoteCommandHandlerStatus Rewind(MPRemoteCommandEvent e)
+        public void Rewind()
         {
             if (BluetoothControls.SeekBackward != null || BluetoothControls.StepBackward != null)
             {
@@ -135,8 +132,28 @@ namespace XamarinAudioManager
                 audioPlayer.Play();
                 audioPlayer.SetRate();
             }
+        }
 
-            return MPRemoteCommandHandlerStatus.Success;
+        public void FastFoward()
+        {
+            if (BluetoothControls.SeekForward != null || BluetoothControls.StepForward != null)
+            {
+                BluetoothControls.SeekForward?.Invoke();
+                BluetoothControls.StepForward.Invoke();
+            }
+            else
+            {
+                audioPlayer.Pause();
+                audioPlayer.FastForward();
+                audioPlayer.Play();
+                audioPlayer.SetRate();
+            }
+        }
+
+        public void ChangePosition(int newTime)
+        {
+            audioPlayer.SeekTo(newTime);
+            audioPlayer.SetRate();
         }
     }
 }

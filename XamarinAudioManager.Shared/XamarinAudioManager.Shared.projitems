@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)AudioManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\PlayerConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)AudioPlayerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IBluetoothManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Models\" />

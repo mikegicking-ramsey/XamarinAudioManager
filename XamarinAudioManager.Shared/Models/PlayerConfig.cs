@@ -13,9 +13,12 @@ namespace XamarinAudioManager.Models
         /// </summary>
         public bool SeekInsteadOfSkip { get; set; }
 
+        public float PlaybackSpeed { get; set; }
+        
         public PlayerConfig()
         {
-            StepSize = 10;
+            StepSize = 15;
+            PlaybackSpeed = 1.0f;
         }
     }
 }

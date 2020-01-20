@@ -12,11 +12,6 @@ namespace XamarinAudioManager.Interfaces
         double AudioIncrement { get; set; }
 
         /// <summary>
-        ///     The current playback speed
-        /// </summary>
-        float PlaybackSpeed { get; set; }
-
-        /// <summary>
         ///  The last Audio Action performed by the Player
         /// </summary>
         AudioAction LastAudioAction { get; set; }
@@ -101,19 +96,9 @@ namespace XamarinAudioManager.Interfaces
 
         #region Lifecycle Hooks
 
-        EventHandler PositionChanged { get; set; }
+        event EventHandler BeforePlaying;
 
-        EventHandler BeforePlaying { get; set; }
-
-        EventHandler AfterPlaying { get; set; }
-
-        EventHandler OnBufferChanged { get; set; }
-
-        EventHandler MediaItemChanged { get; set; }
-
-        EventHandler MediaItemFinished { get; set; }
-
-        EventHandler AudioPlaybackStateChanged { get; set; }
+        event EventHandler AfterPlaying;
 
         #endregion
 

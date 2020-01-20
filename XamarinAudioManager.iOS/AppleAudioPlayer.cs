@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AVFoundation;
 using CoreMedia;
 using Foundation;
@@ -8,11 +9,12 @@ using XamarinAudioManager.Models;
 
 namespace XamarinAudioManager
 {
-    public class AppleAudioPlayer : IAudioPlayer
+    public class AppleAudioPlayer : AudioPlayerBase, IAudioPlayer
     {
         private static Lazy<IAudioPlayer> _audioPlayer = new Lazy<IAudioPlayer>(() => new AppleAudioPlayer());
         public static IAudioPlayer SharedInstance => _audioPlayer.Value;
 
+        public PlayerConfig Configuration { get; set; }
         public IMediaControls MediaControls { get; set; }
 
         public int TimeScale = 60;
@@ -20,23 +22,46 @@ namespace XamarinAudioManager
         public float PlaybackSpeed { get; set; } = 1.0f;
         public AudioAction LastAudioAction { get; set; } = AudioAction.None;
 
+        private NSObject didFinishPlayingObserver;
+        private IDisposable loadedTimeRangesToken;
+
         private AVPlayer audioPlayer;
         public AppleAudioPlayer()
         {
             MediaControls = new MediaControls();
+            Configuration = new PlayerConfig();
         }
 
-        public EventHandler PositionChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public EventHandler BeforePlaying { get; set; }
-        public EventHandler AfterPlaying { get; set; }
-        public EventHandler OnBufferChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public EventHandler MediaItemChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public EventHandler MediaItemFinished { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public EventHandler AudioPlaybackStateChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public event EventHandler BeforePlaying;
+        public event EventHandler AfterPlaying;
+
+        public override TimeSpan Position => audioPlayer == null ? TimeSpan.Zero : TimeSpan.FromSeconds(audioPlayer.CurrentTime.Seconds);
+        public override TimeSpan Duration => audioPlayer == null ? TimeSpan.Zero : TimeSpan.FromSeconds(audioPlayer.CurrentItem.Duration.Seconds);
 
         public void Initialize()
         {
-            //TODO: Set up event Handlers
+            var options = NSKeyValueObservingOptions.Initial | NSKeyValueObservingOptions.New;
+            loadedTimeRangesToken = audioPlayer.AddObserver("currentItem.loadedTimeRanges", options, LoadedTimeRangesChanged);
+            didFinishPlayingObserver = NSNotificationCenter.DefaultCenter.AddObserver(AVPlayerItem.DidPlayToEndTimeNotification, DidFinishPlaying);
+        }
+
+        protected virtual void LoadedTimeRangesChanged(NSObservedChange obj)
+        {
+            var buffered = TimeSpan.Zero;
+            if (audioPlayer?.CurrentItem != null && audioPlayer.CurrentItem.LoadedTimeRanges.Any())
+            {
+                buffered =
+                    TimeSpan.FromSeconds(
+                        audioPlayer.CurrentItem.LoadedTimeRanges.Select(
+                            tr => tr.CMTimeRangeValue.Start.Seconds + tr.CMTimeRangeValue.Duration.Seconds).Max());
+
+                Buffered = buffered;
+            }
+        }
+
+        protected virtual void DidFinishPlaying(NSNotification obj)
+        {
+            OnMediaItemFinished(this, new EventArgs());
         }
 
         public void FastForward()
@@ -111,6 +136,10 @@ namespace XamarinAudioManager
         {
             if (MediaControls.PlayPause != null)
             {
+                MediaControls.PlayPause.Invoke();
+            }
+            else
+            {
                 if (audioPlayer.Rate >= 1.0f)
                 {
                     Pause();
@@ -130,7 +159,7 @@ namespace XamarinAudioManager
             }
             else
             {
-                SeekForward();
+                SeekBackward();
             }
         }
 
@@ -170,8 +199,7 @@ namespace XamarinAudioManager
             {
                 var targetTime = audioPlayer.CurrentTime + CMTime.FromSeconds(AudioIncrement, TimeScale);
                 audioPlayer.SeekAsync(targetTime, CMTime.Zero, CMTime.Zero);
-            }
-            
+            }    
         }
 
         public void SeekTo(int seconds)
@@ -182,13 +210,13 @@ namespace XamarinAudioManager
 
         public void SetRate(float rate)
         {
-            PlaybackSpeed = rate;
+            Configuration.PlaybackSpeed = rate;
             SetRate();
         }
 
         public void SetRate()
         {
-            audioPlayer.SetRate(PlaybackSpeed, CMTime.Zero, CMTime.Zero);
+            audioPlayer.SetRate(Configuration.PlaybackSpeed, CMTime.Zero, CMTime.Zero);
         }
     }
 }

@@ -3,10 +3,18 @@ using XamarinAudioManager.Interfaces;
 
 namespace XamarinAudioManager.Models
 {
-    public class AudioManager
+    public class AudioManager : IAudioManager
     {
-        private static Lazy<IAudioPlayer> implementation = new Lazy<IAudioPlayer>(() => InstantiateAudioPlayer(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
-        public static IAudioPlayer Current
+        public IBluetoothManager BluetoothManager { get; set; }
+        public IAudioPlayer AudioPlayer { get; set; }
+
+        public AudioManager()
+        {
+
+        }
+
+        private static Lazy<IAudioManager> implementation = new Lazy<IAudioManager>(() => InstantiateAudioPlayer(), System.Threading.LazyThreadSafetyMode.PublicationOnly);
+        public static IAudioManager Current
         {
             get
             {
@@ -19,11 +27,7 @@ namespace XamarinAudioManager.Models
             }
         }
 
-        public AudioManager()
-        {
-        }
-
-        internal static IAudioPlayer InstantiateAudioPlayer()
+        internal static IAudioManager InstantiateAudioPlayer()
         {
             return null;
         }
