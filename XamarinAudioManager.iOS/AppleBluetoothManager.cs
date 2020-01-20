@@ -123,7 +123,7 @@ namespace XamarinAudioManager
             if (BluetoothControls.SeekBackward != null || BluetoothControls.StepBackward != null)
             {
                 BluetoothControls.SeekBackward?.Invoke();
-                BluetoothControls.StepBackward.Invoke();
+                BluetoothControls.StepBackward?.Invoke();
             }
             else
             {
@@ -139,7 +139,7 @@ namespace XamarinAudioManager
             if (BluetoothControls.SeekForward != null || BluetoothControls.StepForward != null)
             {
                 BluetoothControls.SeekForward?.Invoke();
-                BluetoothControls.StepForward.Invoke();
+                BluetoothControls.StepForward?.Invoke();
             }
             else
             {
