@@ -27,8 +27,8 @@ namespace XamarinAudioManager
         }
 
         public EventHandler PositionChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public EventHandler BeforePlaying { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public EventHandler AfterPlaying { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public EventHandler BeforePlaying { get; set; }
+        public EventHandler AfterPlaying { get; set; }
         public EventHandler OnBufferChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public EventHandler MediaItemChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public EventHandler MediaItemFinished { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -67,7 +67,7 @@ namespace XamarinAudioManager
         {
             if (MediaControls.Pause != null)
             {
-
+                MediaControls.Pause.Invoke();
             }
             else
             {
@@ -79,6 +79,8 @@ namespace XamarinAudioManager
 
         public void Play()
         {
+            BeforePlaying?.Invoke(this, new EventArgs());
+
             if (MediaControls.Play != null)
             {
                 MediaControls.Play.Invoke();
@@ -89,6 +91,8 @@ namespace XamarinAudioManager
             }
 
             LastAudioAction = AudioAction.Play;
+
+            AfterPlaying?.Invoke(this, new EventArgs());
         }
 
         public void Play(string url)
