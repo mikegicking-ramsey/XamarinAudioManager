@@ -25,7 +25,13 @@ namespace XamarinAudioManager.Models
 
         internal static IAudioPlayer InstantiateAudioPlayer()
         {
+#if ANDROID
+            return new XamarinAudioManager.Android.AudioPlayer();
+#elif COCOA
+            return new XamarinAudioManager.iOS.AppleAudioPlayer();
+#else
             return null;
+#endif
         }
     }
 }
